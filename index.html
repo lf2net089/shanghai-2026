@@ -1,150 +1,508 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Shanghai 2026 | 摩登手冊</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        [x-cloak] { display: none !important; }
-        .glass-header { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); }
-        body { background-color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>上海 2026 | 質感旅遊攻略</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<style>
+  [x-cloak]{display:none!important}
+  body{font-family:'Noto Sans TC',sans-serif;background:#F5F0E8;color:#1A1A2E}
+  .serif{font-family:'Playfair Display',serif}
+  .ver-bar{background:#1E3A6E;color:#fff;font-size:11px;text-align:center;padding:8px 16px;display:flex;align-items:center;justify-content:center;gap:12px}
+  .ver-bar a{color:#F5D789;text-decoration:none;font-weight:700;border:1px solid rgba(245,215,137,.5);border-radius:20px;padding:2px 10px}
+  .day-cover{position:relative;overflow:hidden;border-radius:20px;margin-bottom:24px}
+  .day-cover-bg{position:absolute;inset:0;opacity:.12}
+  .timeline-line{position:absolute;left:20px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,#C94B3D,#D4A843,#1E3A6E)}
+  .cat-badge{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:20px}
+  .card-enter{animation:slideUp .3s ease forwards}
+  @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .tag-pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;background:rgba(0,0,0,.06)}
+  .cost-chip{font-family:'Noto Sans TC',monospace;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
+  .photo-box{background:linear-gradient(135deg,rgba(255,107,157,.08),rgba(255,107,157,.03));border:1px solid rgba(255,107,157,.25);border-radius:12px;padding:10px 14px;font-size:12px;color:#c94b7d}
+  .tips-box{background:linear-gradient(135deg,rgba(212,168,67,.1),rgba(212,168,67,.04));border:1px solid rgba(212,168,67,.35);border-radius:12px;padding:10px 14px;font-size:12px;color:#92700A}
+  .surprise-box{background:linear-gradient(135deg,rgba(201,75,61,.08),rgba(201,75,61,.03));border:1px solid rgba(201,75,61,.25);border-radius:12px;padding:12px 14px;font-size:12px;color:#7A2118}
+  .tab-pill{padding:8px 18px;border-radius:30px;font-size:12px;font-weight:700;transition:all .2s;border:2px solid transparent;white-space:nowrap}
+  .tab-pill.active{background:#1E3A6E;color:#fff;border-color:#1E3A6E;box-shadow:0 4px 12px rgba(30,58,110,.25)}
+  .tab-pill:not(.active){background:#fff;color:#1E3A6E;border-color:#ddd}
+  .overview-card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);transition:all .2s;border:2px solid transparent;cursor:pointer}
+  .overview-card.active{border-color:#C94B3D;box-shadow:0 4px 20px rgba(201,75,61,.2)}
+  .section-label{font-size:10px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;color:#999;margin-bottom:6px}
+  .sticky-header{position:sticky;top:0;z-index:50;background:rgba(245,240,232,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.08)}
+</style>
 </head>
-<body x-data="travelApp()">
-    <header class="glass-header text-white p-6 sticky top-0 z-50 rounded-b-[2.5rem] shadow-2xl">
-        <div class="flex justify-between items-end mb-6">
+<body x-data="app()" x-cloak>
+
+<!-- VERSION SWITCHER -->
+<div class="ver-bar">
+  <span>🔬 研究強化版 V2 · 行程已依 Deep Research 優化</span>
+  <a href="classic.html">切換 V1 原始版 →</a>
+</div>
+
+<!-- STICKY HEADER -->
+<div class="sticky-header px-4 py-3">
+  <div class="flex items-center justify-between mb-3">
+    <div>
+      <div class="section-label">Shanghai 2026</div>
+      <h1 class="serif text-xl font-black text-slate-900 leading-tight">質感都市完整攻略</h1>
+    </div>
+    <div class="flex items-center gap-2">
+      <button @click="toggleCurrency()"
+        class="text-xs font-black px-3 py-1.5 rounded-full border-2 border-slate-800 bg-slate-800 text-white">
+        <span x-text="isTwd ? '🇹🇼 TWD' : '🇨🇳 RMB'"></span>
+      </button>
+    </div>
+  </div>
+  <!-- Day Tabs -->
+  <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+    <template x-for="(day, i) in days" :key="i">
+      <button @click="currentDay=i"
+        :class="currentDay===i ? 'active' : ''"
+        class="tab-pill flex-shrink-0"
+        x-text="'Day '+(i+1)+' · '+day.shortDate"></button>
+    </template>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="px-4 pt-5 pb-28 max-w-lg mx-auto">
+
+  <!-- DAY COVER -->
+  <template x-for="(day, i) in days" :key="i">
+    <div x-show="currentDay===i" class="card-enter">
+
+      <!-- Cover Card -->
+      <div class="day-cover mb-5" :style="'background:'+day.coverGrad">
+        <div class="relative p-5 text-white">
+          <div class="flex items-start justify-between">
             <div>
-                <h1 class="text-2xl font-black tracking-tight text-blue-400">SHANGHAI 2026</h1>
-                <p class="text-slate-400 text-[10px] uppercase tracking-[0.2em] font-bold">Urban Lifestyle Guide</p>
+              <div class="text-3xl mb-2" x-text="day.emoji"></div>
+              <div class="text-xs font-black uppercase tracking-widest opacity-70 mb-1" x-text="day.shortDate+' · Day '+(i+1)"></div>
+              <h2 class="serif text-2xl font-black leading-tight" x-text="day.title"></h2>
+              <p class="text-sm opacity-75 mt-1" x-text="day.subtitle"></p>
             </div>
-            <div @click="toggleCurrency()" class="bg-slate-800 px-3 py-1 rounded-full text-[10px] font-bold border border-slate-700 cursor-pointer">
-                <span x-text="isTwd ? 'TWD 模式' : 'RMB 模式'"></span>
+            <div class="text-right flex-shrink-0">
+              <div class="text-xs opacity-60 mb-1">預算/兩人</div>
+              <div class="font-black text-sm" x-text="isTwd ? day.budgetTwd : day.budgetRmb"></div>
             </div>
-        </div>
-
-        <div class="flex justify-between gap-2">
-            <template x-for="(day, index) in itinerary" :key="index">
-                <button @click="currentDay = index" 
-                    :class="currentDay === index ? 'bg-blue-600 scale-105 shadow-lg' : 'bg-slate-800 opacity-50'"
-                    class="flex-1 py-3 rounded-2xl transition-all duration-300">
-                    <div class="text-[10px] opacity-70 font-bold">DAY</div>
-                    <div class="text-lg font-black" x-text="index + 1"></div>
-                </button>
+          </div>
+          <!-- Tags -->
+          <div class="flex flex-wrap gap-1.5 mt-4">
+            <template x-for="tag in day.tags" :key="tag">
+              <span class="text-xs font-bold bg-white bg-opacity-20 px-2.5 py-1 rounded-full" x-text="tag"></span>
             </template>
+          </div>
         </div>
-    </header>
+      </div>
 
-    <main class="p-6 pb-32">
-        <div class="mb-8">
-            <h2 class="text-2xl font-black text-slate-800" x-text="itinerary[currentDay].title"></h2>
-            <p class="text-blue-600 font-bold text-sm" x-text="itinerary[currentDay].date + ' · 質感都市動線'"></p>
-        </div>
+      <!-- Overview Highlights -->
+      <div class="grid grid-cols-3 gap-2 mb-5">
+        <template x-for="hl in day.highlights" :key="hl.label">
+          <div class="bg-white rounded-2xl p-3 text-center shadow-sm">
+            <div class="text-lg mb-1" x-text="hl.icon"></div>
+            <div class="text-xs font-black text-slate-700 leading-tight" x-text="hl.label"></div>
+            <div class="text-xs text-slate-400 mt-0.5" x-text="hl.val"></div>
+          </div>
+        </template>
+      </div>
 
-        <div class="space-y-8 relative">
-            <div class="absolute left-4 top-2 bottom-2 w-0.5 bg-slate-200"></div>
+      <!-- Timeline -->
+      <div class="relative pl-10" style="padding-left:2.5rem">
+        <div class="timeline-line" style="left:1.0rem"></div>
 
-            <template x-for="(item, index) in itinerary[currentDay].items" :key="index">
-                <div class="relative pl-10">
-                    <div class="absolute left-[-2px] top-1 w-4 h-4 bg-white border-4 border-blue-600 rounded-full z-10"></div>
-                    
-                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 active:scale-[0.98] transition-transform">
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="text-xs font-black text-blue-600 bg-blue-50 px-2 py-1 rounded-lg" x-text="item.time"></span>
-                            <i :class="item.icon" class="text-slate-300 text-lg"></i>
-                        </div>
-                        
-                        <h3 class="font-bold text-lg text-slate-800" x-text="item.task"></h3>
-                        <div class="flex items-center text-slate-400 text-[11px] mt-1 font-bold">
-                            <i class="fa-solid fa-location-dot mr-1"></i> <span x-text="item.loc"></span>
-                        </div>
+        <template x-for="(item, j) in day.items" :key="j">
+          <div class="relative mb-5">
+            <!-- Dot -->
+            <div class="absolute bg-white border-4 rounded-full z-10 shadow"
+              :style="'left:-1.55rem;top:1rem;width:18px;height:18px;border-color:'+day.dotColor"></div>
 
-                        <template x-if="item.tip">
-                            <div class="mt-4 text-xs text-slate-600 bg-slate-50 p-3 rounded-2xl border-l-4 border-blue-400 leading-relaxed">
-                                <span class="font-bold text-blue-600">攻略：</span> <span x-text="item.tip"></span>
-                            </div>
-                        </template>
+            <!-- Time chip -->
+            <div class="text-xs font-black mb-1.5" :style="'color:'+day.dotColor" x-text="item.time"></div>
 
-                        <template x-if="item.surprise">
-                            <div class="mt-4" x-data="{ open: false }">
-                                <button @click="open = !open" 
-                                    class="w-full py-3 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-2xl text-[11px] font-black shadow-lg shadow-rose-200 uppercase tracking-widest">
-                                    <i class="fa-solid fa-gift mr-2 animate-bounce"></i> 解鎖約會驚喜
-                                </button>
-                                <div x-show="open" x-transition x-cloak class="mt-3 p-4 bg-rose-50 border border-rose-100 rounded-2xl text-xs text-rose-700 font-medium leading-relaxed">
-                                    <i class="fa-solid fa-heart mr-1"></i> <span x-text="item.surprise"></span>
-                                </div>
-                            </div>
-                        </template>
-
-                        <div class="mt-4 flex justify-end">
-                            <span class="text-[10px] font-black text-slate-300 tracking-tighter" 
-                                x-text="isTwd ? '預估：NT$ ' + Math.round(item.cost * 4.5) : '預估：¥ ' + item.cost"></span>
-                        </div>
+            <!-- Card -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden"
+              x-data="{open:false}" @click="open=!open">
+              <div class="p-4">
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex items-start gap-3 flex-1">
+                    <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 text-base"
+                      :style="'background:'+day.dotColor+'18'">
+                      <i :class="'fa-solid '+item.icon" :style="'color:'+day.dotColor"></i>
                     </div>
+                    <div class="flex-1 min-w-0">
+                      <h3 class="font-black text-sm text-slate-800 leading-tight" x-text="item.task"></h3>
+                      <div class="flex items-center text-slate-400 text-xs mt-0.5 gap-1">
+                        <i class="fa-solid fa-location-dot text-xs"></i>
+                        <span class="truncate" x-text="item.loc"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex flex-col items-end gap-1.5 flex-shrink-0">
+                    <span class="cost-chip text-white" :style="'background:'+day.dotColor"
+                      x-text="item.cost>0 ? (isTwd ? 'NT$'+Math.round(item.cost*4.64) : '¥'+item.cost) : '免費'"></span>
+                    <i class="fa-solid fa-chevron-down text-slate-300 text-xs transition-transform duration-200"
+                      :class="open ? 'rotate-180' : ''"></i>
+                  </div>
                 </div>
-            </template>
-        </div>
-    </main>
+              </div>
 
-    <footer class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-slate-100 p-4 flex justify-around items-center z-50">
-        <div class="flex flex-col items-center text-blue-600">
-            <i class="fa-solid fa-map-location-dot text-xl"></i>
-            <span class="text-[10px] mt-1 font-bold">行程</span>
-        </div>
-        <div class="opacity-20 flex flex-col items-center">
-            <i class="fa-solid fa-camera-retro text-xl"></i>
-            <span class="text-[10px] mt-1 font-bold">街拍</span>
-        </div>
-        <div class="opacity-20 flex flex-col items-center">
-            <i class="fa-solid fa-wallet text-xl"></i>
-            <span class="text-[10px] mt-1 font-bold">預算</span>
-        </div>
-    </footer>
+              <!-- Expanded Detail -->
+              <div x-show="open" x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 -translate-y-2"
+                x-transition:enter-end="opacity-100 translate-y-0" x-cloak
+                class="px-4 pb-4 border-t border-slate-50 pt-3 space-y-2">
 
-    <script>
-        function travelApp() {
-            return {
-                currentDay: 0,
-                isTwd: true,
-                toggleCurrency() { this.isTwd = !this.isTwd },
-                itinerary: [
-                    {
-                        date: "5/10", title: "粉色幻想與賽博森林",
-                        items: [
-                            { time: "15:30", task: "Sanrio Gift Gate", loc: "南京東路旗艦店", icon: "fa-solid fa-heart", cost: 200, tip: "2025新概念店，門口巨型Kitty必拍" },
-                            { time: "18:00", task: "蟹尊苑 (蟹黃麵)", loc: "巨鹿路店", icon: "fa-solid fa-bowl-food", cost: 130, tip: "必點蟹粉金拌麵，視覺衝擊極強" },
-                            { time: "22:00", task: "INS 復興樂園 (Day A)", loc: "雁蕩路109號", icon: "fa-solid fa-moon", cost: 500, tip: "一站式頂級Club，推薦La Fin看夜景" }
-                        ]
-                    },
-                    {
-                        date: "5/11", title: "法式優雅與男團放鬆",
-                        items: [
-                            { time: "11:00", task: "大壺春生煎", loc: "四川中路", icon: "fa-solid fa-hotdog", cost: 40, tip: "老上海派系，無湯汁底超酥。配一碗牛肉湯是標配" },
-                            { time: "13:00", task: "法式現代街拍", loc: "外灘源/虎丘路", icon: "fa-solid fa-camera", cost: 800, tip: "紅磚建築群與三件套同框，質感最高" },
-                            { time: "16:30", task: "Speak Low (隱藏酒吧)", loc: "復興中路", icon: "fa-solid fa-martini-glass-citrus", cost: 200, surprise: "帶她進去買書，推開書架後的機關門進入秘密酒吧，儀式感滿分" },
-                            { time: "21:00", task: "GM 瑰冪足道 (Day B)", loc: "淮海中路", icon: "fa-solid fa-spa", cost: 400, tip: "高顏值男技師服務，環境像Lounge Bar，預算友好且質感強" }
-                        ]
-                    },
-                    {
-                        date: "5/12", title: "極致 SPA 與 賽博夜景",
-                        items: [
-                            { time: "14:00", task: "曲水蘭亭 (極致SPA)", loc: "市區店", icon: "fa-solid fa-couch", cost: 1500, tip: "車厘子/哈根達斯自由，完全恢復體力。建議停留5小時以上" },
-                            { time: "19:30", task: "北外灘國客中心", loc: "太平路", icon: "fa-solid fa-clapperboard", cost: 0, tip: "找那個巨型銀色球地標，拍陸家嘴三件套最佳位" }
-                        ]
-                    },
-                    {
-                        date: "5/13", title: "機場美學歸途",
-                        items: [
-                            { time: "10:00", task: "出發前往 PVG", loc: "浦東機場", icon: "fa-solid fa-taxi", cost: 150, tip: "預留1小時車程，建議9:30從飯店出發" },
-                            { time: "11:00", task: "霸王茶姬 & 星巴克", loc: "機場限定店", icon: "fa-solid fa-mug-hot", cost: 60, tip: "APP先下單！手拿杯在航站樓拍一張「離境感」大片作為結尾" }
-                        ]
-                    }
-                ]
-            }
-        }
-    </script>
+                <template x-if="item.tip">
+                  <div class="tips-box">
+                    <div class="font-black text-xs mb-1 text-amber-700">💡 攻略</div>
+                    <div x-text="item.tip"></div>
+                  </div>
+                </template>
+
+                <template x-if="item.photo">
+                  <div class="photo-box">
+                    <div class="font-black text-xs mb-1">📸 拍照亮點</div>
+                    <div x-text="item.photo"></div>
+                  </div>
+                </template>
+
+                <template x-if="item.surprise">
+                  <div x-data="{show:false}">
+                    <button @click.stop="show=!show"
+                      class="w-full py-2.5 bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-xl text-xs font-black shadow-md tracking-widest uppercase">
+                      <i class="fa-solid fa-gift mr-1"></i> 解鎖約會驚喜
+                    </button>
+                    <div x-show="show" x-cloak class="surprise-box mt-2">
+                      <i class="fa-solid fa-heart mr-1 text-rose-400"></i>
+                      <span x-text="item.surprise"></span>
+                    </div>
+                  </div>
+                </template>
+
+                <template x-if="item.transport">
+                  <div class="flex items-center gap-2 text-xs text-slate-500 bg-slate-50 rounded-xl px-3 py-2">
+                    <i class="fa-solid fa-route text-slate-400"></i>
+                    <span x-text="item.transport"></span>
+                  </div>
+                </template>
+
+                <template x-if="item.warning">
+                  <div class="bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 text-xs text-amber-800">
+                    <i class="fa-solid fa-triangle-exclamation mr-1"></i>
+                    <span x-text="item.warning"></span>
+                  </div>
+                </template>
+
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Day Summary Box -->
+      <div class="rounded-2xl p-4 mt-2 mb-6" :style="'background:'+day.dotColor+'12;border:1.5px solid '+day.dotColor+'30'">
+        <div class="text-xs font-black mb-1" :style="'color:'+day.dotColor">✦ 今日主軸</div>
+        <p class="text-sm text-slate-700 leading-relaxed" x-text="day.summary"></p>
+      </div>
+
+    </div>
+  </template>
+
+  <!-- QUICK REFS -->
+  <div class="mt-8 mb-4">
+    <div class="section-label">快速參考</div>
+    <h2 class="serif text-xl font-black text-slate-900 mb-4">旅行裝備清單</h2>
+  </div>
+
+  <!-- Checklist -->
+  <div class="bg-white rounded-2xl shadow-sm p-5 mb-4" x-data="checklist()">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="font-black text-slate-800">出發前必備</h3>
+      <span class="text-xs font-black text-white px-3 py-1 rounded-full bg-slate-700"
+        x-text="done+'/'+total+' 完成'"></span>
+    </div>
+    <div class="h-1.5 bg-slate-100 rounded-full mb-4 overflow-hidden">
+      <div class="h-full bg-gradient-to-r from-rose-500 to-amber-400 rounded-full transition-all duration-500"
+        :style="'width:'+pct+'%'"></div>
+    </div>
+    <div class="space-y-2">
+      <template x-for="(item, i) in items" :key="i">
+        <label class="flex items-start gap-3 p-3 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors"
+          :class="item.checked ? 'opacity-50' : ''">
+          <input type="checkbox" x-model="item.checked" @change="calc()"
+            class="mt-0.5 w-4 h-4 accent-rose-500 flex-shrink-0 cursor-pointer">
+          <div>
+            <div class="text-sm font-bold text-slate-700" :class="item.checked ? 'line-through' : ''" x-text="item.label"></div>
+            <div class="text-xs text-slate-400" x-text="item.note" x-show="item.note"></div>
+          </div>
+        </label>
+      </template>
+    </div>
+  </div>
+
+  <!-- Budget Table -->
+  <div class="bg-white rounded-2xl shadow-sm p-5 mb-4">
+    <h3 class="font-black text-slate-800 mb-4">💰 預算總表（兩人）</h3>
+    <div class="space-y-2" x-data="{twd:false}">
+      <div class="flex justify-end mb-2">
+        <button @click="twd=!twd" class="text-xs font-black px-3 py-1 rounded-full bg-slate-800 text-white">
+          <span x-text="twd ? '🇹🇼 TWD' : '🇨🇳 RMB'"></span>
+        </button>
+      </div>
+      <template x-for="row in budget" :key="row.label">
+        <div class="flex items-center justify-between py-2 border-b border-slate-50">
+          <div class="flex items-center gap-2">
+            <span x-text="row.icon"></span>
+            <span class="text-sm text-slate-700" x-text="row.label"></span>
+          </div>
+          <span class="font-black text-sm" x-text="twd ? row.twd : row.rmb"
+            :class="row.total ? 'text-rose-600 text-base' : 'text-slate-700'"></span>
+        </div>
+      </template>
+    </div>
+  </div>
+
+  <!-- Key Contacts -->
+  <div class="bg-white rounded-2xl shadow-sm p-5 mb-4">
+    <h3 class="font-black text-slate-800 mb-3">📞 緊急資訊</h3>
+    <div class="space-y-2 text-sm">
+      <div class="flex justify-between py-1.5 border-b border-slate-50">
+        <span class="text-slate-500">台灣駐滬辦事處</span>
+        <span class="font-bold">+86-21-5292-5567</span>
+      </div>
+      <div class="flex justify-between py-1.5 border-b border-slate-50">
+        <span class="text-slate-500">錦江之星飯店</span>
+        <span class="font-bold">+86-21-6327-5888</span>
+      </div>
+      <div class="flex justify-between py-1.5 border-b border-slate-50">
+        <span class="text-slate-500">GM芳華 (預約)</span>
+        <span class="font-bold">普安路1609號</span>
+      </div>
+      <div class="flex justify-between py-1.5">
+        <span class="text-slate-500">INS新仙鶴</span>
+        <span class="font-bold">蘇州河路109號</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer note -->
+  <div class="text-center mt-8 pb-4">
+    <p class="serif text-lg font-black text-slate-400 italic">Bon voyage ✦</p>
+    <p class="text-xs text-slate-300 mt-1">上海 2026 · 5/10–5/13 · 1 CNY ≈ NT$4.64</p>
+  </div>
+
+</main>
+
+<!-- BOTTOM NAV OVERLAY -->
+<div class="fixed bottom-0 left-0 right-0 z-40">
+  <div class="max-w-lg mx-auto px-4 pb-6 pt-3 bg-gradient-to-t from-[#F5F0E8] via-[#F5F0E8]/95 to-transparent">
+    <div class="flex gap-2">
+      <template x-for="(day, i) in days" :key="i">
+        <button @click="currentDay=i;scrollTop()"
+          class="flex-1 py-3 rounded-2xl text-xs font-black transition-all duration-200 shadow-sm"
+          :class="currentDay===i ? 'text-white shadow-lg' : 'bg-white text-slate-500'"
+          :style="currentDay===i ? 'background:'+day.dotColor : ''">
+          <div class="text-base" x-text="day.emoji"></div>
+          <div x-text="'D'+(i+1)"></div>
+        </button>
+      </template>
+    </div>
+  </div>
+</div>
+
+<script>
+function app(){
+  return {
+    currentDay: 0,
+    isTwd: false,
+    budget: [
+      {icon:'🏨', label:'住宿 3晚', rmb:'¥900–1,200', twd:'NT$4,176–5,568', total:false},
+      {icon:'🍽️', label:'餐飲（全程）', rmb:'¥2,200–3,200', twd:'NT$10,208–14,848', total:false},
+      {icon:'🚕', label:'交通（滴滴+地鐵）', rmb:'¥350–500', twd:'NT$1,624–2,320', total:false},
+      {icon:'🎟️', label:'景點&體驗', rmb:'¥100–200', twd:'NT$464–928', total:false},
+      {icon:'🎶', label:'夜生活 2晚', rmb:'¥820–1,100', twd:'NT$3,805–5,104', total:false},
+      {icon:'🛍️', label:'購物（Sanrio等）', rmb:'¥500–1,500', twd:'NT$2,320–6,960', total:false},
+      {icon:'💎', label:'兩人總計', rmb:'¥4,870–7,700', twd:'NT$22,597–35,728', total:true},
+    ],
+    toggleCurrency(){ this.isTwd = !this.isTwd },
+    scrollTop(){ window.scrollTo({top:0,behavior:'smooth'}) },
+    days: [
+      {
+        emoji:'✈️', shortDate:'5/10 週六',
+        title:'抵達 · 感官校準',
+        subtitle:'外灘日落 · Sanrio · INS首秀',
+        coverGrad:'linear-gradient(135deg,#C94B3D,#E85D35,#D4A843)',
+        dotColor:'#C94B3D',
+        budgetRmb:'¥900–1,250',budgetTwd:'NT$4,176–5,800',
+        tags:['外灘','Sanrio','INS夜店','大壺春'],
+        summary:'這一天的邏輯是「從輕到重」：午餐清爽落地，Sanrio感受溫度，外灘找到這座城市的呼吸節奏，再用 INS 的氛圍把兩個人切換到城市夜晚模式。',
+        highlights:[
+          {icon:'🥟', label:'裕興記', val:'¥104/人'},
+          {icon:'🎀', label:'Sanrio', val:'安彩匯1F'},
+          {icon:'🎶', label:'INS', val:'蘇州河路109'},
+        ],
+        items:[
+          {time:'10:00–12:00', task:'PVG 抵達 · 入住', loc:'錦江之星 人民廣場', icon:'fa-plane-arrival', cost:0,
+           tip:'建議滴滴直達，行李多時更省心。大木橋路站→PVG 約 34 分鐘（不含步行），實際保留 45–60 分鐘。',
+           transport:'滴滴 PVG → 飯店 約 ¥150–200 / 50–70 分鐘'},
+          {time:'12:30–14:00', task:'裕興記 蹦蹦魚面館', loc:'人民廣場店', icon:'fa-bowl-rice', cost:208,
+           tip:'人均約 ¥104，抵達後第一餐穩且好吃。避開 12:00–13:30 尖峰，14:00 後從容入座。',
+           warning:'排隊尖峰為 12:00–13:30，建議 14:00 後前往'},
+          {time:'14:15–15:30', task:'Sanrio Gift Gate', loc:'京安路299號 安彩匯廣場 1F S-103', icon:'fa-gift', cost:300,
+           tip:'正式核實地址：京安路299號安彩匯廣場 1F S-103，就在人民廣場附近，步行可達。10:00–22:00。平日下午人流最佳。',
+           photo:'入口 IP 裝置合照、購物袋道具、每個主題角落角度',
+           surprise:'走進去的瞬間，輕聲說：「這裡好像你。」記得看她的眼神。'},
+          {time:'15:45–19:30', task:'外灘 · 黃浦江日落散步', loc:'南京路步行街 → 外灘堤防', icon:'fa-water', cost:0,
+           tip:'日落時段（17:30–18:30）光線最強烈，浦江+陸家嘴全景。步行從安彩匯過去約 20 分鐘，或滴滴 10 分鐘。',
+           photo:'外灘堤防正面對岸陸家嘴、南京路路口建築立面、黃浦江倒影'},
+          {time:'20:00–21:00', task:'大壺春 · 米其林 Bib Gourmand', loc:'四川中路店（外灘附近）', icon:'fa-utensils', cost:56,
+           tip:'人均 ¥28，Bib Gourmand 認證。生煎配辣醬油是上海的味道密碼。外灘步行可達，不需排很久。'},
+          {time:'22:00–01:00', task:'INS新仙鶴 / La Fin · 夜生活Day A', loc:'蘇州河路109號', icon:'fa-music', cost:333,
+           tip:'週日（5/10）Klook 有方案 NT$773/人，建議出發前 3–5 天購買確認 lineup。La Fin 定位 upscale hip hop / Top 40。Dress code: Smart Casual（男：長褲+乾淨球鞋，女：洋裝+長褲皆可）。',
+           warning:'出發前 3–5 天再次確認 lineup 與 guest list 政策',
+           surprise:'在回飯店的路上，問她今晚最喜歡哪個瞬間。'},
+        ]
+      },
+      {
+        emoji:'📷', shortDate:'5/11 週一',
+        title:'質感漫遊 · 法租界緩行',
+        subtitle:'武康大樓 · 本幫佳餚 · 新天地',
+        coverGrad:'linear-gradient(135deg,#1E3A6E,#2E5BA8,#4A90D9)',
+        dotColor:'#1E3A6E',
+        budgetRmb:'¥850–1,650',budgetTwd:'NT$3,944–7,656',
+        tags:['武康大樓','人和館','新天地','城市漫步'],
+        summary:'這是一天關於「走」的行程。沒有硬性景點，武康大樓到新天地的路線本身就是目的地。午餐吃上海本幫菜的精髓，讓新天地的石庫門自己說故事。',
+        highlights:[
+          {icon:'📷', label:'武康大樓', val:'早上最美'},
+          {icon:'🍲', label:'人和館', val:'¥170/人'},
+          {icon:'🏛️', label:'新天地', val:'漫步+咖啡'},
+        ],
+        items:[
+          {time:'09:30–12:00', task:'武康大樓街區攝影', loc:'武康路 & 淮海中路交叉口 （徐匯）', icon:'fa-camera', cost:0,
+           tip:'平日 08:00–10:30 最佳（人少+光線乾淨）。路線：武康大樓 → 武康路 → 巨鹿路 → 愚園路，全程步行完全可行。',
+           photo:'① 武康大樓正面半圓轉角 ② 武康路梧桐樹廊道（秋光穿透） ③ 愚園路老洋房+現代咖啡館對比',
+           transport:'飯店 → 靜安寺站（地鐵1號線）→ 步行 15 分鐘到武康大樓'},
+          {time:'12:20–13:40', task:'人和館 · 上海本幫菜', loc:'茂名南路店（靜安/盧灣）', icon:'fa-utensils', cost:340,
+           tip:'人均 ¥170，米其林連續三年上榜。幾乎常態 packed，強烈建議出發前在大眾點評預訂座位。',
+           warning:'必須提前預訂！常態滿座'},
+          {time:'14:20–17:00', task:'新天地 · 石庫門漫遊', loc:'石庫門 & 新天地廣場 （黃浦）', icon:'fa-building', cost:150,
+           tip:'新天地官方定位：美食、社交、藝術、零售四合一。不要硬排下一個景點，讓節奏自己流動。',
+           photo:'石庫門磚牆紋理、廣場人物街拍、老建築與現代店鋪的交界',
+           surprise:'找一家有落地窗的咖啡館，點兩杯咖啡，什麼都不說，只是坐著看窗外。'},
+          {time:'17:30–19:00', task:'步行收尾 · 返回飯店', loc:'淮海中路沿路', icon:'fa-person-walking', cost:0,
+           tip:'走回去的路上，沿淮海中路，有很多值得隨機走進的小店。今天本來就是「慢」的節奏。'},
+          {time:'19:30–21:00', task:'鮮得來 · 排骨年糕', loc:'淮海南路總店', icon:'fa-drumstick-bite', cost:64,
+           tip:'人均 ¥32，上海老字號。排骨年糕是很多上海人從小到大的味道，放進行程裡就對了。'},
+        ]
+      },
+      {
+        emoji:'🌆', shortDate:'5/12 週二',
+        title:'探索邊界 · 北外灘日落',
+        subtitle:'張園 · 霓虹小龍蝦 · 北外灘 · GM芳華',
+        coverGrad:'linear-gradient(135deg,#4A1D96,#7C3AED,#A78BFA)',
+        dotColor:'#6D28D9',
+        budgetRmb:'¥900–1,350',budgetTwd:'NT$4,176–6,264',
+        tags:['張園','霓虹小龍蝦','北外灘','GM芳華'],
+        summary:'這天最大的亮點是「北外灘」——同樣是外灘天際線，但在對岸虹口，人少80%，視角更完整，浦東+外灘+天空一次全收。晚上GM芳華是本次旅程節奏最不一樣的體驗。',
+        highlights:[
+          {icon:'🏛️', label:'張園', val:'靜安 南京西路'},
+          {icon:'🌃', label:'北外灘', val:'人少版外灘'},
+          {icon:'💆', label:'GM芳華', val:'¥489/兩人'},
+        ],
+        items:[
+          {time:'10:30–12:00', task:'張園 Heritage Block', loc:'靜安區，近南京西路站', icon:'fa-landmark', cost:0,
+           tip:'官方與開發方確認位於南京西路核心，與南京西路站步行連通。保留歷史石庫門建築改造的高端街區。',
+           photo:'① 老石庫門門框構圖 ② 保留的歷史磚牆細節 ③ 新舊建築交叉視角',
+           transport:'飯店 → 地鐵2號線 → 南京西路站 → 步行 5 分鐘'},
+          {time:'12:20–13:20', task:'霓虹小龍蝦 · 公益西橋店', loc:'公益西橋站附近（普陀）', icon:'fa-shrimp', cost:118,
+           tip:'人均 ¥59，大眾點評評分高。平日午餐 2–3 輪也可能需要稍等，建議 12:00 前到。',
+           transport:'南京西路站 → 地鐵13號線 → 公益西橋站 約 15 分鐘'},
+          {time:'14:00–16:30', task:'南京西路商圈 · 自由時間', loc:'IFC / 久光 / 靜安嘉里', icon:'fa-bag-shopping', cost:300,
+           tip:'可逛精品、咖啡館、或找一間安靜的地方補個午覺。這段不強排，讓兩個人自己決定。'},
+          {time:'17:30–19:30', task:'北外灘 · 替代外灘日落', loc:'虹口，Line 12 → 國際客運中心站', icon:'fa-binoculars', cost:0,
+           tip:'官方標記可一次收到外灘對岸天際線+浦東的角度。比外灘人少80%，光線更乾淨，適合慢慢走。',
+           photo:'外灘歷史建築+陸家嘴雙層全景、黃浦江反光、藍調時刻（18:30–19:00）',
+           transport:'地鐵12號線 → 國際客運中心站，步行5分鐘到濱江步道',
+           surprise:'「我特地找了一個沒什麼人的地方，給你看這個。」'},
+          {time:'20:30–23:30', task:'GM芳華 · 夜生活 Day B', loc:'普安路1609號 1樓（黃浦）', icon:'fa-spa', cost:489,
+           tip:'百度地址可核實：普安路1609號。兩人方案 ¥489，含足浴+按摩+餐飲+歌舞演出。建議提前電話/大眾點評預訂確認服務內容與時段。',
+           warning:'出發前必須電話預約，確認能訂到女士服務人員時段與房型'},
+        ]
+      },
+      {
+        emoji:'🛫', shortDate:'5/13 週三',
+        title:'機場美學巡禮 · 歸途',
+        subtitle:'霸王茶姬 · 星巴克停機坪 · 13:10 PVG→TPE',
+        coverGrad:'linear-gradient(135deg,#D4A843,#F59E0B,#FDE68A)',
+        dotColor:'#B45309',
+        budgetRmb:'¥370–520',budgetTwd:'NT$1,717–2,413',
+        tags:['霸王茶姬','星巴克停機坪','13:10登機'],
+        summary:'最後一天行程緊湊，節奏控制是關鍵。不要在飯店附近貪戀景點，確保 10:30 前到 PVG，用兩杯飲料畫下完美的離別句點。',
+        highlights:[
+          {icon:'🍵', label:'霸王茶姬', val:'PVG機場店'},
+          {icon:'☕', label:'星巴克', val:'停機坪景觀'},
+          {icon:'✈️', label:'登機', val:'13:10 PVG→TPE'},
+        ],
+        items:[
+          {time:'07:00–08:15', task:'飯店早餐 · Check-out', loc:'錦江之星 人民廣場', icon:'fa-mug-hot', cost:80,
+           tip:'今天一切從簡，行李前一晚整理好。Check-out 後行李可寄存前台，但今天直接帶走。',
+           warning:'⚠️ 退房時間確認為 12:00，但今天 08:15 就要出發'},
+          {time:'08:15–09:15', task:'前往 PVG 浦東機場', loc:'大木橋路站 → PVG', icon:'fa-taxi', cost:200,
+           tip:'強烈建議滴滴直達（行李多）。實際車程保留 45–70 分鐘較穩（含車候時間）。地鐵路線：大木橋路→廣蘭路→磁浮，共 1 小時 15 分。',
+           transport:'滴滴直達 ¥150–200 / 50–70 分｜或地鐵+磁浮 ¥55 / 75 分'},
+          {time:'09:15–10:30', task:'PVG Check-in & 安檢', loc:'浦東國際機場（確認T1/T2）', icon:'fa-passport', cost:0,
+           tip:'台胞證+護照都帶好，確認是同一人姓名。出發前查 App 確認航廈（T1 or T2），提前準備液體品裝透明袋。',
+           warning:'確認 T1 / T2 航廈，兩廈距離遠，走錯要 30 分鐘'},
+          {time:'10:30–11:00', task:'霸王茶姬 PVG 機場店', loc:'候機樓（出境後）', icon:'fa-leaf', cost:90,
+           tip:'提前用小程式下單（「伯牙絕弦」招牌），到機場直接取。東方美學杯×落地窗停機坪=完美離別照。',
+           photo:'東方美學杯×落地窗停機坪構圖，一定要補到自然光',
+           surprise:'「謝謝你這幾天。」就這一句，不需要多說。'},
+          {time:'11:00–12:30', task:'星巴克 · 停機坪景觀店', loc:'PVG 出境後候機廳', icon:'fa-coffee', cost:130,
+           tip:'靠窗位看飛機起降，最後一杯咖啡。Cold Brew 或 Flat White 推薦。這是最好的發呆位置。',
+           photo:'落地玻璃窗×停機坪飛機×咖啡杯，旅程收尾最美靜物構圖'},
+          {time:'13:10', task:'PVG → TPE · 帶回一整座城市', loc:'浦東國際機場', icon:'fa-plane-departure', cost:0,
+           tip:'帶走的不只是照片。'},
+        ]
+      },
+    ]
+  }
+}
+
+function checklist(){
+  return {
+    done:0, total:0, pct:0,
+    items:[
+      {label:'護照（有效期 ≥ 6 個月）', note:'', checked:false},
+      {label:'台胞證', note:'旅行社代辦 NT$1,500', checked:false},
+      {label:'機票電子票截圖', note:'13:10 PVG→TPE 確認', checked:false},
+      {label:'飯店訂單截圖', note:'錦江之星 人民廣場', checked:false},
+      {label:'支付寶 App + 綁卡', note:'VISA/Mastercard 都可', checked:false},
+      {label:'eSIM 購買 & 激活', note:'Airalo 推薦 USD$5–8/7天', checked:false},
+      {label:'高德地圖（離線包下載）', note:'上海地圖離線安裝', checked:false},
+      {label:'滴滴出行 App + 綁支付寶', note:'機場接送必備', checked:false},
+      {label:'美團 App（餐廳預訂）', note:'人和館提前預訂！', checked:false},
+      {label:'霸王茶姬小程式', note:'Day 4 機場提前下單', checked:false},
+      {label:'INS/La Fin 票券購買', note:'Klook 提前 3–5 天買', checked:false},
+      {label:'GM芳華 電話預約', note:'普安路1609號', checked:false},
+      {label:'人民幣現金 ¥2,000–3,000', note:'ATM 備用', checked:false},
+      {label:'轉接頭（220V 扁平2孔）', note:'', checked:false},
+      {label:'防曬乳 SPF50+', note:'5月上海日照強', checked:false},
+      {label:'摺疊傘', note:'5月降雨機率 25%', checked:false},
+    ],
+    init(){
+      this.total = this.items.length
+      this.calc()
+    },
+    calc(){
+      this.done = this.items.filter(i=>i.checked).length
+      this.pct = Math.round(this.done/this.total*100)
+    }
+  }
+}
+</script>
 </body>
 </html>
