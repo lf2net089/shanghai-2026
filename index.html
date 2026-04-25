@@ -33,6 +33,11 @@
   .sticky-hdr{position:sticky;top:0;z-index:50;background:rgba(245,240,232,.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,0,0,.07)}
   .card-anim{animation:fadeUp .25s ease}
   @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .rst-card{background:#fff;border-radius:16px;border:1px solid #e2e8f0;padding:14px;margin-bottom:10px}
+  .rst-name{font-weight:900;font-size:13px;color:#1a1a2e}
+  .rst-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;display:inline-block;margin-left:4px}
+  .shop-pill{background:#fff;border:1.5px solid #e2e8f0;border-radius:12px;padding:10px 12px;font-size:12px;font-weight:700;color:#374151}
+  .info-box{background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:12px;padding:10px 14px;font-size:12px;color:#1e40af}
 </style>
 </head>
 <body x-data="app()" x-cloak>
@@ -58,7 +63,7 @@
   <div class="flex items-center justify-between mb-3">
     <div>
       <div class="section-label">上海 2026 · 5/10–5/13</div>
-      <h1 class="serif text-xl font-black text-slate-900 leading-tight">研究強化版</h1>
+      <h1 class="serif text-xl font-black text-slate-900 leading-tight">經典觀光</h1>
     </div>
     <button @click="isTwd=!isTwd"
       class="text-xs font-black px-3 py-1.5 rounded-full bg-slate-800 text-white flex-shrink-0">
@@ -264,54 +269,112 @@
 </template>
 
 <!-- 行前清單 Tab -->
-<div x-show="currentDay===4" class="card-anim space-y-4">
-<div class="section-label mt-2 mb-3">出發前清單</div>
-<div class="bg-white rounded-2xl shadow-sm p-5 mb-4 border border-slate-100" x-data="checklist()">
-  <div class="flex items-center justify-between mb-3">
-    <h3 class="font-black text-slate-800 text-sm">必備核對</h3>
-    <span class="text-xs font-black text-white px-3 py-1 rounded-full bg-slate-700"
-      x-text="done+'/'+total+' ✓'"></span>
-  </div>
-  <div class="h-1.5 bg-slate-100 rounded-full mb-4 overflow-hidden">
-    <div class="h-full bg-gradient-to-r from-rose-500 to-amber-400 rounded-full transition-all"
-      :style="'width:'+pct+'%'"></div>
-  </div>
-  <div class="space-y-1">
-    <template x-for="(it,i) in items" :key="i">
-      <label class="flex items-start gap-3 p-2.5 rounded-xl cursor-pointer hover:bg-slate-50"
-        :class="it.checked?'opacity-50':''">
-        <input type="checkbox" x-model="it.checked" @change="calc()"
-          class="mt-0.5 w-4 h-4 accent-rose-500 flex-shrink-0">
-        <div>
-          <div class="text-sm font-bold" :class="it.checked?'line-through text-slate-400':'text-slate-700'"
-            x-text="it.label"></div>
-          <div class="text-xs text-slate-400" x-text="it.note" x-show="it.note"></div>
-        </div>
-      </label>
-    </template>
-  </div>
-</div>
+<div x-show="currentDay===4" class="card-anim space-y-5">
 
-<div class="section-label mb-3">預算總表</div>
-<div class="bg-white rounded-2xl shadow-sm p-5 mb-6 border border-slate-100" x-data="{tw:false}">
-  <div class="flex justify-between items-center mb-4">
-    <h3 class="font-black text-slate-800 text-sm">兩人費用估算</h3>
-    <button @click="tw=!tw" class="text-xs font-black px-3 py-1 rounded-full bg-slate-700 text-white">
-      <span x-text="tw?'🇹🇼 TWD':'🇨🇳 RMB'"></span>
-    </button>
-  </div>
-  <template x-for="r in budget" :key="r.label">
-    <div class="flex items-center justify-between py-2.5"
-      :class="r.total?'border-t-2 border-amber-300 mt-2':'border-b border-slate-50'">
-      <div class="flex items-center gap-2 text-sm">
-        <span x-text="r.icon"></span>
-        <span :class="r.total?'font-black text-slate-800':'text-slate-600'" x-text="r.label"></span>
+  <!-- 天氣 & 穿搭 -->
+  <div>
+    <div class="section-label mt-2 mb-3">天氣 &amp; 穿搭建議</div>
+    <div class="bg-white rounded-2xl shadow-sm p-5 border border-slate-100">
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <div class="bg-blue-50 rounded-xl p-3 text-center"><div class="text-2xl mb-1">🌡️</div><div class="text-xs font-black text-blue-800">氣溫</div><div class="text-sm font-bold text-blue-700">20–28°C</div></div>
+        <div class="bg-amber-50 rounded-xl p-3 text-center"><div class="text-2xl mb-1">💧</div><div class="text-xs font-black text-amber-800">濕度</div><div class="text-sm font-bold text-amber-700">60–80%（悶熱）</div></div>
+        <div class="bg-rose-50 rounded-xl p-3 text-center"><div class="text-2xl mb-1">🌂</div><div class="text-xs font-black text-rose-800">降雨機率</div><div class="text-sm font-bold text-rose-700">30–50%（備傘）</div></div>
+        <div class="bg-green-50 rounded-xl p-3 text-center"><div class="text-2xl mb-1">👗</div><div class="text-xs font-black text-green-800">穿搭建議</div><div class="text-sm font-bold text-green-700">薄長袖/輕薄外層</div></div>
       </div>
-      <span class="font-black" :class="r.total?'text-rose-600 text-base':'text-slate-700 text-sm'"
-        x-text="tw?r.twd:r.rmb"></span>
+      <div class="tips-box mb-2"><div class="font-black text-xs mb-1 text-amber-700">💡 穿搭策略</div><div>拍照優先選：米白、奶油黃、燕麥色。避免大花或螢光——法租界+外灘背景天然上相，素色更耐看。帶一件輕薄開衫（冷氣場所）及折疊傘（春雨突發）。</div></div>
+      <div class="info-box"><div class="font-black text-xs mb-1">⚠️ 注意事項</div><div>5月上海已入梅雨邊緣，早晚溫差約 8°C。夜晚穿搭建議 Smart Casual，帶薄外套防冷氣。戶外攝影最佳：早晨 8–10 點 / 傍晚 16:30–18:30（黃金小時）。</div></div>
     </div>
-  </template>
-</div>
+  </div>
+
+  <!-- 餐廳攻略 -->
+  <div>
+    <div class="section-label mb-3">完整餐廳攻略</div>
+    <div class="text-xs font-black text-slate-500 mb-2 ml-1">🌅 早餐 / 輕食</div>
+    <div class="rst-card"><div class="rst-name">大壺春 <span class="rst-badge bg-amber-100 text-amber-700">米其林Bib</span></div><div class="text-xs text-slate-500 mt-1">📍 四川中路589號（外灘步行可達）</div><div class="grid grid-cols-2 gap-2 mt-2 text-xs"><div><span class="text-slate-400">人均</span> <strong>¥28–35</strong></div><div><span class="text-slate-400">必點</span> <strong>生煎+辣醬油</strong></div><div><span class="text-slate-400">開門</span> <strong>07:00</strong></div><div><span class="text-slate-400">排隊</span> <strong>08:30前無排隊</strong></div></div></div>
+    <div class="rst-card"><div class="rst-name">鮮得來排骨年糕 <span class="rst-badge bg-rose-100 text-rose-700">老字號</span></div><div class="text-xs text-slate-500 mt-1">📍 淮海南路總店（近飯店）</div><div class="grid grid-cols-2 gap-2 mt-2 text-xs"><div><span class="text-slate-400">人均</span> <strong>¥32–45</strong></div><div><span class="text-slate-400">必點</span> <strong>排骨年糕+豆腐花</strong></div></div></div>
+    <div class="text-xs font-black text-slate-500 mb-2 ml-1 mt-3">🍽️ 正餐（質感）</div>
+    <div class="rst-card"><div class="rst-name">裕興記 <span class="rst-badge bg-blue-100 text-blue-700">必試</span></div><div class="text-xs text-slate-500 mt-1">📍 人民廣場附近多店</div><div class="grid grid-cols-2 gap-2 mt-2 text-xs"><div><span class="text-slate-400">人均</span> <strong>¥80–120</strong></div><div><span class="text-slate-400">必點</span> <strong>蹦蹦魚面、蝦仁鍋巴</strong></div><div><span class="text-slate-400">排隊</span> <strong>14:00後基本不排</strong></div><div><span class="text-slate-400">建議</span> <strong>Day 1 午餐</strong></div></div></div>
+    <div class="rst-card"><div class="rst-name">人和館 <span class="rst-badge bg-amber-100 text-amber-700">米其林</span></div><div class="text-xs text-slate-500 mt-1">📍 茂名南路（新天地附近）</div><div class="grid grid-cols-2 gap-2 mt-2 text-xs"><div><span class="text-slate-400">人均</span> <strong>¥170–250</strong></div><div><span class="text-slate-400">必點</span> <strong>扣三絲、走油蹄膀</strong></div><div><span class="text-slate-400">排隊</span> <strong>⚠️ 必須提前預訂</strong></div><div><span class="text-slate-400">建議</span> <strong>Day 2 午餐</strong></div></div><div class="warn-box mt-2 text-xs flex gap-1 items-center"><i class="fa-solid fa-triangle-exclamation flex-shrink-0"></i>常態滿座，美團/大眾點評提前預訂！備案：附近小館 ¥60–100</div></div>
+    <div class="rst-card"><div class="rst-name">霓虹小龍蝦 <span class="rst-badge bg-rose-100 text-rose-700">網紅</span></div><div class="text-xs text-slate-500 mt-1">📍 公益西橋站附近（普陀）</div><div class="grid grid-cols-2 gap-2 mt-2 text-xs"><div><span class="text-slate-400">人均</span> <strong>¥59–80</strong></div><div><span class="text-slate-400">必點</span> <strong>蒜蓉小龍蝦</strong></div><div><span class="text-slate-400">建議</span> <strong>Day 3 午餐</strong></div><div><span class="text-slate-400">排隊</span> <strong>平日午餐低</strong></div></div></div>
+  </div>
+
+  <!-- 購物指南 -->
+  <div>
+    <div class="section-label mb-3">購物指南</div>
+    <div class="bg-white rounded-2xl shadow-sm p-5 border border-slate-100">
+      <div class="text-xs font-black text-slate-600 mb-3">🎀 Sanrio 必買清單</div>
+      <div class="grid grid-cols-2 gap-2 mb-4"><div class="shop-pill">限定款玩偶 ¥50–200</div><div class="shop-pill">聯名悠遊卡 ¥20–50</div><div class="shop-pill">主題馬克杯 ¥60–150</div><div class="shop-pill">文具禮盒 ¥30–80</div><div class="shop-pill">IP鑰匙圈 ¥25–60</div><div class="shop-pill">季節限定零食 ¥15–40</div></div>
+      <div class="text-xs font-black text-slate-600 mb-3">🛍️ 南京西路/IFC 品牌</div>
+      <div class="space-y-1.5 text-sm">
+        <div class="flex justify-between items-center py-1.5 border-b border-slate-50"><span class="font-bold">久光百貨</span><span class="text-xs text-slate-400">日系品牌集中，護膚首選</span></div>
+        <div class="flex justify-between items-center py-1.5 border-b border-slate-50"><span class="font-bold">IFC商場</span><span class="text-xs text-slate-400">LV/Chanel/精品手錶</span></div>
+        <div class="flex justify-between items-center py-1.5 border-b border-slate-50"><span class="font-bold">靜安嘉里中心</span><span class="text-xs text-slate-400">質感生活選品+咖啡</span></div>
+        <div class="flex justify-between items-center py-1.5 border-b border-slate-50"><span class="font-bold">新天地廣場</span><span class="text-xs text-slate-400">設計師品牌/概念店</span></div>
+        <div class="flex justify-between items-center py-1.5"><span class="font-bold">TX淮海</span><span class="text-xs text-slate-400">街頭/潮流/國潮品牌</span></div>
+      </div>
+      <div class="tips-box mt-3 text-xs"><div class="font-black mb-1 text-amber-700">💡 退稅提醒</div><div>台灣護照在中國大陸不適用出境退稅。購物直接用支付寶付款享店家優惠即可。</div></div>
+    </div>
+  </div>
+
+  <!-- 夜生活 -->
+  <div>
+    <div class="section-label mb-3">夜生活完整說明</div>
+    <div class="bg-white rounded-2xl shadow-sm p-5 border border-slate-100 mb-3">
+      <div class="flex items-center gap-2 mb-3"><div class="w-8 h-8 rounded-xl bg-indigo-100 flex items-center justify-center text-sm">🎶</div><div><div class="font-black text-sm text-slate-800">Day A · INS新仙鶴 / La Fin</div><div class="text-xs text-slate-400">蘇州河路109號（5/10 週六）</div></div><span class="ml-auto text-xs font-black bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">⭐⭐⭐⭐⭐</span></div>
+      <div class="grid grid-cols-2 gap-2 text-xs mb-3"><div><span class="text-slate-400">人均</span> <strong>¥200–400（含酒）</strong></div><div><span class="text-slate-400">進場時間</span> <strong>22:00–24:00</strong></div><div><span class="text-slate-400">Dress Code</span> <strong>Smart Casual↑</strong></div><div><span class="text-slate-400">購票</span> <strong>Klook NT$773/人</strong></div></div>
+      <div class="tips-box text-xs mb-2"><div class="font-black mb-1 text-amber-700">💡 攻略</div><div>週六 lineup 最強，出發前 3–5 天在 Klook 購買（含 guest list）。護照備用。</div></div>
+      <div class="warn-box text-xs flex gap-1 items-center"><i class="fa-solid fa-triangle-exclamation flex-shrink-0"></i>出發前確認 lineup，週六為 peak night，建議 22:30 前入場</div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-sm p-5 border border-slate-100">
+      <div class="flex items-center gap-2 mb-3"><div class="w-8 h-8 rounded-xl bg-rose-100 flex items-center justify-center text-sm">💆</div><div><div class="font-black text-sm text-slate-800">Day B · GM芳華</div><div class="text-xs text-slate-400">普安路1609號 1樓（5/12 週二）</div></div><span class="ml-auto text-xs font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full">⭐⭐⭐⭐⭐</span></div>
+      <div class="grid grid-cols-2 gap-2 text-xs mb-3"><div><span class="text-slate-400">兩人方案</span> <strong>¥489（約2小時）</strong></div><div><span class="text-slate-400">包含</span> <strong>足浴+按摩+餐飲</strong></div><div><span class="text-slate-400">特色</span> <strong>高顏值服務，含演出</strong></div><div><span class="text-slate-400">預訂</span> <strong>電話/大眾點評</strong></div></div>
+      <div class="warn-box text-xs flex gap-1 items-center"><i class="fa-solid fa-triangle-exclamation flex-shrink-0"></i>務必提前預約確認！服務時段有限</div>
+    </div>
+  </div>
+
+  <!-- 攝影路線 -->
+  <div>
+    <div class="section-label mb-3">攝影路線指南</div>
+    <div class="bg-white rounded-2xl shadow-sm p-5 border border-slate-100">
+      <div class="space-y-4">
+        <div><div class="font-black text-sm text-slate-800 mb-1">📍 Route A · 法租界（Day 2 早晨）</div><div class="text-xs text-slate-600 leading-relaxed">武康大樓 → 武康路梧桐廊道 → 巨鹿路咖啡館街 → 愚園路老洋房</div><div class="photo-box mt-2 text-xs">最佳時段：08:00–11:00（側光柔和）。穿搭：素色長裙或白T+丹寧</div></div>
+        <div class="border-t border-slate-100 pt-4"><div class="font-black text-sm text-slate-800 mb-1">📍 Route B · 外灘黃昏（Day 1 傍晚）</div><div class="text-xs text-slate-600 leading-relaxed">南京東路 → 外灘堤防步行道 → 外白渡橋折返。陸家嘴+歷史建築同框</div><div class="photo-box mt-2 text-xs">最佳時段：17:30–18:30（黃金小時）。燈火全亮：18:30–19:00</div></div>
+        <div class="border-t border-slate-100 pt-4"><div class="font-black text-sm text-slate-800 mb-1">📍 Route C · 北外灘（Day 3 傍晚）</div><div class="text-xs text-slate-600 leading-relaxed">國際客運中心濱江步道。對岸外灘+陸家嘴全景，人少80%</div><div class="photo-box mt-2 text-xs">最佳時段：18:00–19:30（藍調+燈光齊亮）</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 出發前清單 -->
+  <div>
+    <div class="section-label mb-3">出發前清單</div>
+    <div class="bg-white rounded-2xl shadow-sm p-5 border border-slate-100" x-data="checklist()">
+      <div class="flex items-center justify-between mb-3"><h3 class="font-black text-slate-800 text-sm">必備核對</h3><span class="text-xs font-black text-white px-3 py-1 rounded-full bg-slate-700" x-text="done+'/'+total+' ✓'"></span></div>
+      <div class="h-1.5 bg-slate-100 rounded-full mb-4 overflow-hidden"><div class="h-full bg-gradient-to-r from-rose-500 to-amber-400 rounded-full transition-all" :style="'width:'+pct+'%'"></div></div>
+      <div class="space-y-0.5">
+        <template x-for="(it,i) in items" :key="i">
+          <label class="flex items-start gap-3 p-2.5 rounded-xl cursor-pointer hover:bg-slate-50" :class="it.checked?'opacity-50':''">
+            <input type="checkbox" x-model="it.checked" @change="calc()" class="mt-0.5 w-4 h-4 accent-rose-500 flex-shrink-0">
+            <div><div class="text-sm font-bold" :class="it.checked?'line-through text-slate-400':'text-slate-700'" x-text="it.label"></div><div class="text-xs text-slate-400" x-text="it.note" x-show="it.note"></div></div>
+          </label>
+        </template>
+      </div>
+    </div>
+  </div>
+
+  <!-- 預算總表 -->
+  <div>
+    <div class="section-label mb-3">預算總表</div>
+    <div class="bg-white rounded-2xl shadow-sm p-5 mb-6 border border-slate-100" x-data="{tw:false}">
+      <div class="flex justify-between items-center mb-4"><h3 class="font-black text-slate-800 text-sm">兩人費用估算（4天）</h3><button @click="tw=!tw" class="text-xs font-black px-3 py-1 rounded-full bg-slate-700 text-white"><span x-text="tw?'🇹🇼 TWD':'🇨🇳 RMB'"></span></button></div>
+      <template x-for="r in budget" :key="r.label">
+        <div class="flex items-center justify-between py-2.5" :class="r.total?'border-t-2 border-amber-300 mt-2':'border-b border-slate-50'">
+          <div class="flex items-center gap-2 text-sm"><span x-text="r.icon"></span><span :class="r.total?'font-black text-slate-800':'text-slate-600'" x-text="r.label"></span></div>
+          <span class="font-black" :class="r.total?'text-rose-600 text-base':'text-slate-700 text-sm'" x-text="tw?r.twd:r.rmb"></span>
+        </div>
+      </template>
+    </div>
+  </div>
+
 </div><!-- end 行前清單 tab -->
 
 </main>

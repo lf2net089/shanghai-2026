@@ -63,7 +63,7 @@
   <div class="flex items-center justify-between mb-3">
     <div>
       <div class="section-label">上海 2026 · 5/10–5/13 · 詳細版</div>
-      <h1 class="serif text-xl font-black text-slate-900 leading-tight">詳細攻略書</h1>
+      <h1 class="serif text-xl font-black text-slate-900 leading-tight">質感探索</h1>
     </div>
     <button @click="isTwd=!isTwd"
       class="text-xs font-black px-3 py-1.5 rounded-full bg-slate-800 text-white flex-shrink-0">
@@ -77,7 +77,7 @@
         x-text="'D'+(i+1)+' · '+day.shortDate"></button>
     </template>
     <button @click="currentDay=4" :class="currentDay===4?'active':''"
-      class="tab-pill flex-shrink-0">📋 攻略</button>
+      class="tab-pill flex-shrink-0">📋 清單</button>
   </div>
 </div>
 
@@ -593,7 +593,7 @@
         class="flex-1 py-2.5 rounded-2xl text-xs font-black transition-all shadow-sm"
         :class="currentDay===4?'bg-slate-800 text-white shadow-md':'bg-white text-slate-400 border border-slate-100'">
         <div class="text-base leading-none mb-0.5">📋</div>
-        <div>攻略</div>
+        <div>清單</div>
       </button>
     </div>
   </div>
