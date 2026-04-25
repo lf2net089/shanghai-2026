@@ -13,11 +13,14 @@
   [x-cloak]{display:none!important}
   body{font-family:'Noto Sans TC',sans-serif;background:#F5F0E8;color:#1A1A2E}
   .serif{font-family:'Playfair Display',serif}
-  .ver-nav{background:#1E3A6E;padding:8px 16px;display:flex;align-items:center;gap:8px;overflow-x:auto}
-  .ver-nav a,.ver-nav span{font-size:11px;font-weight:700;white-space:nowrap;padding:4px 12px;border-radius:20px;text-decoration:none}
-  .ver-nav .active{background:#F5D789;color:#1E3A6E}
-  .ver-nav a:not(.active){background:rgba(255,255,255,.15);color:rgba(255,255,255,.8)}
-  .ver-label{color:rgba(255,255,255,.5);font-size:10px;font-weight:700;letter-spacing:.05em}
+  .ver-nav{background:#1E3A6E;padding:10px 14px;display:flex;align-items:stretch;gap:6px;overflow-x:auto}
+  .ver-tab{display:flex;flex-direction:column;align-items:flex-start;white-space:nowrap;padding:7px 12px;border-radius:12px;text-decoration:none;cursor:default;min-width:0}
+  .ver-tab.active{background:#F5D789;color:#1E3A6E}
+  .ver-tab:not(.active){background:rgba(255,255,255,.12);color:rgba(255,255,255,.85)}
+  .ver-tab .vt-title{font-size:11px;font-weight:900;line-height:1.2}
+  .ver-tab .vt-sub{font-size:9px;font-weight:500;opacity:.7;margin-top:2px;line-height:1.2}
+  .ver-tab.active .vt-sub{opacity:.6}
+  .ver-label{color:rgba(255,255,255,.4);font-size:9px;font-weight:700;letter-spacing:.05em;writing-mode:vertical-rl;flex-shrink:0;align-self:center}
   .timeline-line{position:absolute;left:1.0rem;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--dc),var(--dc)40%,#e2e8f0)}
   .tab-pill{padding:8px 18px;border-radius:30px;font-size:12px;font-weight:700;transition:all .2s;border:2px solid transparent;white-space:nowrap}
   .tab-pill.active{background:#1E3A6E;color:#fff;border-color:#1E3A6E;box-shadow:0 4px 12px rgba(30,58,110,.25)}
@@ -38,9 +41,18 @@
 <!-- VERSION NAV -->
 <div class="ver-nav">
   <span class="ver-label">版本</span>
-  <a href="index.html">🔬 研究版</a>
-  <span class="active">📋 規劃版</span>
-  <a href="guide.html">📖 攻略書</a>
+  <a href="index.html" class="ver-tab">
+    <span class="vt-title">🔬 研究版</span>
+    <span class="vt-sub">核實地址·北外灘·GM芳華</span>
+  </a>
+  <span class="ver-tab active">
+    <span class="vt-title">📋 規劃版</span>
+    <span class="vt-sub">原始企劃·Speak Low·蟹尊苑</span>
+  </span>
+  <a href="guide.html" class="ver-tab">
+    <span class="vt-title">📖 攻略書</span>
+    <span class="vt-sub">餐廳·購物·清單·天氣</span>
+  </a>
 </div>
 
 <!-- STICKY HEADER -->
