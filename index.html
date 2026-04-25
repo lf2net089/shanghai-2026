@@ -14,13 +14,12 @@
   body{font-family:'Noto Sans TC',sans-serif;background:#F5F0E8;color:#1A1A2E}
   .serif{font-family:'Playfair Display',serif}
   .ver-nav{background:#1E3A6E;padding:10px 14px;display:flex;align-items:stretch;gap:6px;overflow-x:auto}
-  .ver-tab{display:flex;flex-direction:column;align-items:flex-start;white-space:nowrap;padding:7px 12px;border-radius:12px;text-decoration:none;cursor:default;min-width:0}
-  .ver-tab.active{background:#F5D789;color:#1E3A6E}
-  .ver-tab:not(.active){background:rgba(255,255,255,.12);color:rgba(255,255,255,.85)}
-  .ver-tab .vt-title{font-size:11px;font-weight:900;line-height:1.2}
-  .ver-tab .vt-sub{font-size:9px;font-weight:500;opacity:.7;margin-top:2px;line-height:1.2}
-  .ver-tab.active .vt-sub{opacity:.6}
-  .ver-label{color:rgba(255,255,255,.4);font-size:9px;font-weight:700;letter-spacing:.05em;writing-mode:vertical-rl;flex-shrink:0;align-self:center}
+  .ver-tab{display:flex;flex-direction:column;align-items:flex-start;white-space:nowrap;padding:8px 14px;border-radius:14px;text-decoration:none;cursor:default;min-width:0;border:1.5px solid transparent}
+  .ver-tab.active{background:#F5D789;color:#1E3A6E;border-color:#F5D789}
+  .ver-tab:not(.active){background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border-color:rgba(255,255,255,.15)}
+  .ver-tab .vt-title{font-size:12px;font-weight:900;line-height:1.3;letter-spacing:.01em}
+  .ver-tab .vt-sub{font-size:9.5px;font-weight:500;opacity:.65;margin-top:2px;line-height:1.3}
+  .ver-tab.active .vt-sub{opacity:.55}
   .timeline-line{position:absolute;left:1.0rem;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--dc),var(--dc)40%,#e2e8f0)}
   .tab-pill{padding:8px 18px;border-radius:30px;font-size:12px;font-weight:700;transition:all .2s;border:2px solid transparent;white-space:nowrap}
   .tab-pill.active{background:#1E3A6E;color:#fff;border-color:#1E3A6E;box-shadow:0 4px 12px rgba(30,58,110,.25)}
@@ -40,18 +39,17 @@
 
 <!-- VERSION NAV -->
 <div class="ver-nav">
-  <span class="ver-label">版本</span>
   <span class="ver-tab active">
-    <span class="vt-title">🔬 研究版</span>
-    <span class="vt-sub">核實地址·北外灘·GM芳華</span>
+    <span class="vt-title">精準探索</span>
+    <span class="vt-sub">核實地址 · 動線最優</span>
   </span>
   <a href="classic.html" class="ver-tab">
-    <span class="vt-title">📋 規劃版</span>
-    <span class="vt-sub">原始企劃·Speak Low·蟹尊苑</span>
+    <span class="vt-title">初心全覽</span>
+    <span class="vt-sub">完整四天 · 原版企劃</span>
   </a>
   <a href="guide.html" class="ver-tab">
-    <span class="vt-title">📖 攻略書</span>
-    <span class="vt-sub">餐廳·購物·清單·天氣</span>
+    <span class="vt-title">旅行百科</span>
+    <span class="vt-sub">吃買清單 · 一查就懂</span>
   </a>
 </div>
 
@@ -77,6 +75,40 @@
 </div>
 
 <main class="px-4 pt-4 pb-28 max-w-lg mx-auto">
+
+<!-- ── 四天快速預覽 ── -->
+<div class="mb-5">
+  <div class="text-xs font-black text-slate-400 tracking-widest uppercase mb-2.5">四天行程一覽</div>
+  <div class="flex gap-2.5 overflow-x-auto pb-1" style="scrollbar-width:none;-webkit-overflow-scrolling:touch">
+    <template x-for="(day,i) in days" :key="i">
+      <div @click="currentDay=i;window.scrollTo({top:0,behavior:'smooth'})"
+        class="flex-shrink-0 rounded-2xl p-3.5 cursor-pointer transition-all"
+        style="width:148px"
+        :style="currentDay===i
+          ?'background:'+day.dotColor+';box-shadow:0 6px 20px '+day.dotColor+'40'
+          :'background:#fff;border:1.5px solid #e2e8f0'">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xl" x-text="day.emoji"></span>
+          <span class="text-xs font-black rounded-full px-2 py-0.5"
+            :style="currentDay===i?'background:rgba(255,255,255,.25);color:#fff':'background:#f1f5f9;color:#94a3b8'"
+            x-text="'Day '+(i+1)"></span>
+        </div>
+        <div class="text-xs font-black leading-snug mb-1.5"
+          :class="currentDay===i?'text-white':'text-slate-800'" x-text="day.title"></div>
+        <div class="text-xs leading-snug mb-2"
+          :class="currentDay===i?'text-white opacity-70':'text-slate-400'" x-text="day.subtitle"></div>
+        <div class="flex flex-wrap gap-1">
+          <template x-for="tag in day.tags.slice(0,2)" :key="tag">
+            <span class="text-xs px-1.5 py-0.5 rounded-full font-bold"
+              :style="currentDay===i?'background:rgba(255,255,255,.2);color:#fff':'background:#f8fafc;color:#64748b;border:1px solid #e2e8f0'"
+              x-text="tag"></span>
+          </template>
+        </div>
+      </div>
+    </template>
+  </div>
+</div>
+
 <template x-for="(day,i) in days" :key="i">
 <div x-show="currentDay===i" class="card-anim" :style="'--dc:'+day.dotColor">
 
