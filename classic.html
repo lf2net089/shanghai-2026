@@ -40,15 +40,15 @@
 <!-- VERSION NAV -->
 <div class="ver-nav">
   <a href="index.html" class="ver-tab">
-    <span class="vt-title">精準探索</span>
+    <span class="vt-title">經典觀光</span>
     <span class="vt-sub">核實地址 · 動線最優</span>
   </a>
   <span class="ver-tab active">
-    <span class="vt-title">初心全覽</span>
+    <span class="vt-title">舒服上海</span>
     <span class="vt-sub">完整四天 · 原版企劃</span>
   </span>
   <a href="guide.html" class="ver-tab">
-    <span class="vt-title">旅行百科</span>
+    <span class="vt-title">質感探索</span>
     <span class="vt-sub">吃買清單 · 一查就懂</span>
   </a>
 </div>
@@ -71,6 +71,8 @@
         class="tab-pill flex-shrink-0"
         x-text="'D'+(i+1)+' · '+day.shortDate"></button>
     </template>
+    <button @click="currentDay=4" :class="currentDay===4?'active':''"
+      class="tab-pill flex-shrink-0">📋 行前清單</button>
   </div>
 </div>
 
@@ -258,10 +260,12 @@
 </div>
 </template>
 
-<!-- Key Contacts -->
-<div class="section-label mt-6 mb-3">關鍵資訊</div>
-<div class="bg-white rounded-2xl shadow-sm p-5 mb-8 border border-slate-100">
-  <h3 class="font-black text-slate-800 text-sm mb-3">📞 緊急聯絡</h3>
+<!-- 行前清單 Tab -->
+<div x-show="currentDay===4" class="card-anim space-y-4">
+
+<div class="section-label mt-2 mb-3">關鍵聯絡資訊</div>
+<div class="bg-white rounded-2xl shadow-sm p-5 border border-slate-100">
+  <h3 class="font-black text-slate-800 text-sm mb-3">📞 重要地址 & 聯絡</h3>
   <div class="space-y-2 text-sm">
     <div class="flex justify-between py-1.5 border-b border-slate-50">
       <span class="text-slate-500">台灣駐滬辦事處</span>
@@ -282,6 +286,55 @@
   </div>
 </div>
 
+<div class="section-label mb-3">出發前清單</div>
+<div class="bg-white rounded-2xl shadow-sm p-5 border border-slate-100" x-data="checklist()">
+  <div class="flex items-center justify-between mb-3">
+    <h3 class="font-black text-slate-800 text-sm">必備核對</h3>
+    <span class="text-xs font-black text-white px-3 py-1 rounded-full bg-slate-700"
+      x-text="done+'/'+total+' ✓'"></span>
+  </div>
+  <div class="h-1.5 bg-slate-100 rounded-full mb-4 overflow-hidden">
+    <div class="h-full bg-gradient-to-r from-rose-500 to-amber-400 rounded-full transition-all"
+      :style="'width:'+pct+'%'"></div>
+  </div>
+  <div class="space-y-0.5">
+    <template x-for="(it,i) in items" :key="i">
+      <label class="flex items-start gap-3 p-2.5 rounded-xl cursor-pointer hover:bg-slate-50"
+        :class="it.checked?'opacity-50':''">
+        <input type="checkbox" x-model="it.checked" @change="calc()"
+          class="mt-0.5 w-4 h-4 accent-rose-500 flex-shrink-0">
+        <div>
+          <div class="text-sm font-bold" :class="it.checked?'line-through text-slate-400':'text-slate-700'"
+            x-text="it.label"></div>
+          <div class="text-xs text-slate-400" x-text="it.note" x-show="it.note"></div>
+        </div>
+      </label>
+    </template>
+  </div>
+</div>
+
+<div class="section-label mb-3">預算總表</div>
+<div class="bg-white rounded-2xl shadow-sm p-5 mb-6 border border-slate-100" x-data="{tw:false}">
+  <div class="flex justify-between items-center mb-4">
+    <h3 class="font-black text-slate-800 text-sm">兩人費用估算</h3>
+    <button @click="tw=!tw" class="text-xs font-black px-3 py-1 rounded-full bg-slate-700 text-white">
+      <span x-text="tw?'🇹🇼 TWD':'🇨🇳 RMB'"></span>
+    </button>
+  </div>
+  <template x-for="r in budget" :key="r.label">
+    <div class="flex items-center justify-between py-2.5"
+      :class="r.total?'border-t-2 border-amber-300 mt-2':'border-b border-slate-50'">
+      <div class="flex items-center gap-2 text-sm">
+        <span x-text="r.icon"></span>
+        <span :class="r.total?'font-black text-slate-800':'text-slate-600'" x-text="r.label"></span>
+      </div>
+      <span class="font-black" :class="r.total?'text-rose-600 text-base':'text-slate-700 text-sm'"
+        x-text="tw?r.twd:r.rmb"></span>
+    </div>
+  </template>
+</div>
+</div><!-- end 行前清單 tab -->
+
 </main>
 
 <!-- Bottom nav -->
@@ -297,6 +350,12 @@
           <div x-text="'D'+(i+1)"></div>
         </button>
       </template>
+      <button @click="currentDay=4;window.scrollTo({top:0,behavior:'smooth'})"
+        class="flex-1 py-2.5 rounded-2xl text-xs font-black transition-all shadow-sm"
+        :class="currentDay===4?'bg-slate-800 text-white shadow-md':'bg-white text-slate-400 border border-slate-100'">
+        <div class="text-base leading-none mb-0.5">📋</div>
+        <div>清單</div>
+      </button>
     </div>
   </div>
 </div>
@@ -429,7 +488,39 @@ function app(){
            tip:'帶走的不只是照片。'},
         ]
       },
-    ]
+    ],
+    budget:[
+      {icon:'🏨',label:'住宿 3晚',rmb:'¥900–1,200',twd:'NT$4,176–5,568',total:false},
+      {icon:'🍽️',label:'餐飲（全程）',rmb:'¥2,000–3,000',twd:'NT$9,280–13,920',total:false},
+      {icon:'🚕',label:'交通（滴滴+地鐵）',rmb:'¥350–500',twd:'NT$1,624–2,320',total:false},
+      {icon:'🎶',label:'夜生活 2晚',rmb:'¥820–1,100',twd:'NT$3,805–5,104',total:false},
+      {icon:'🛍️',label:'購物（Sanrio等）',rmb:'¥300–1,000',twd:'NT$1,392–4,640',total:false},
+      {icon:'💎',label:'兩人總計',rmb:'¥4,370–6,800',twd:'NT$20,277–31,552',total:true},
+    ],
+  }
+}
+
+function checklist(){
+  return{
+    done:0,total:0,pct:0,
+    items:[
+      {label:'護照（有效期 ≥ 6 個月）',note:'入境中國大陸必備',checked:false},
+      {label:'台胞證',note:'旅行社代辦約 NT$1,500',checked:false},
+      {label:'機票截圖（13:10 PVG→TPE）',note:'',checked:false},
+      {label:'飯店訂單截圖',note:'錦江之星 人民廣場淮海東路',checked:false},
+      {label:'支付寶 App + 綁卡',note:'VISA/Mastercard 皆可',checked:false},
+      {label:'eSIM 購買 & 激活',note:'Airalo 推薦 USD$5–8/7天',checked:false},
+      {label:'高德地圖（離線包下載）',note:'',checked:false},
+      {label:'滴滴出行 App + 綁支付寶',note:'',checked:false},
+      {label:'美團 App（預訂餐廳）',note:'提前1–2天預訂重點餐廳',checked:false},
+      {label:'INS Klook 票券購買',note:'出發前 3–5 天購買',checked:false},
+      {label:'GM 瑰冪 電話預約',note:'確認時段與方案',checked:false},
+      {label:'人民幣現金 ¥2,000–3,000',note:'備用 ATM',checked:false},
+      {label:'轉接頭（220V 扁平2孔）',note:'',checked:false},
+      {label:'確認 PVG T1/T2 航廈',note:'出發前查 App，兩廈距離遠！',checked:false},
+    ],
+    init(){this.total=this.items.length;this.calc()},
+    calc(){this.done=this.items.filter(i=>i.checked).length;this.pct=Math.round(this.done/this.total*100)}
   }
 }
 </script>

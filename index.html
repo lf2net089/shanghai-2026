@@ -40,15 +40,15 @@
 <!-- VERSION NAV -->
 <div class="ver-nav">
   <span class="ver-tab active">
-    <span class="vt-title">精準探索</span>
+    <span class="vt-title">經典觀光</span>
     <span class="vt-sub">核實地址 · 動線最優</span>
   </span>
   <a href="classic.html" class="ver-tab">
-    <span class="vt-title">初心全覽</span>
+    <span class="vt-title">舒服上海</span>
     <span class="vt-sub">完整四天 · 原版企劃</span>
   </a>
   <a href="guide.html" class="ver-tab">
-    <span class="vt-title">旅行百科</span>
+    <span class="vt-title">質感探索</span>
     <span class="vt-sub">吃買清單 · 一查就懂</span>
   </a>
 </div>
@@ -71,6 +71,8 @@
         class="tab-pill flex-shrink-0"
         x-text="'D'+(i+1)+' · '+day.shortDate"></button>
     </template>
+    <button @click="currentDay=4" :class="currentDay===4?'active':''"
+      class="tab-pill flex-shrink-0">📋 行前清單</button>
   </div>
 </div>
 
@@ -261,8 +263,9 @@
 </div>
 </template>
 
-<!-- Checklist -->
-<div class="section-label mt-6 mb-3">出發前清單</div>
+<!-- 行前清單 Tab -->
+<div x-show="currentDay===4" class="card-anim space-y-4">
+<div class="section-label mt-2 mb-3">出發前清單</div>
 <div class="bg-white rounded-2xl shadow-sm p-5 mb-4 border border-slate-100" x-data="checklist()">
   <div class="flex items-center justify-between mb-3">
     <h3 class="font-black text-slate-800 text-sm">必備核對</h3>
@@ -289,9 +292,8 @@
   </div>
 </div>
 
-<!-- Budget -->
 <div class="section-label mb-3">預算總表</div>
-<div class="bg-white rounded-2xl shadow-sm p-5 mb-8 border border-slate-100" x-data="{tw:false}">
+<div class="bg-white rounded-2xl shadow-sm p-5 mb-6 border border-slate-100" x-data="{tw:false}">
   <div class="flex justify-between items-center mb-4">
     <h3 class="font-black text-slate-800 text-sm">兩人費用估算</h3>
     <button @click="tw=!tw" class="text-xs font-black px-3 py-1 rounded-full bg-slate-700 text-white">
@@ -310,6 +312,7 @@
     </div>
   </template>
 </div>
+</div><!-- end 行前清單 tab -->
 
 </main>
 
@@ -326,6 +329,12 @@
           <div x-text="'D'+(i+1)"></div>
         </button>
       </template>
+      <button @click="currentDay=4;window.scrollTo({top:0,behavior:'smooth'})"
+        class="flex-1 py-2.5 rounded-2xl text-xs font-black transition-all shadow-sm"
+        :class="currentDay===4?'bg-slate-800 text-white shadow-md':'bg-white text-slate-400 border border-slate-100'">
+        <div class="text-base leading-none mb-0.5">📋</div>
+        <div>清單</div>
+      </button>
     </div>
   </div>
 </div>
