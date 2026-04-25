@@ -79,11 +79,11 @@
 <!-- ── 四天快速預覽 ── -->
 <div class="mb-5">
   <div class="text-xs font-black text-slate-400 tracking-widest uppercase mb-2.5">四天行程一覽</div>
-  <div class="flex gap-2.5 overflow-x-auto pb-1" style="scrollbar-width:none;-webkit-overflow-scrolling:touch">
+  <div class="flex gap-2 overflow-x-auto pb-1" style="scrollbar-width:none;-webkit-overflow-scrolling:touch">
     <template x-for="(day,i) in days" :key="i">
       <div @click="currentDay=i;window.scrollTo({top:0,behavior:'smooth'})"
         class="flex-shrink-0 rounded-2xl p-3.5 cursor-pointer transition-all"
-        style="width:148px"
+        style="width:112px"
         :style="currentDay===i
           ?'background:'+day.dotColor+';box-shadow:0 6px 20px '+day.dotColor+'40'
           :'background:#fff;border:1.5px solid #e2e8f0'">
