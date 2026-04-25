@@ -77,7 +77,7 @@
         x-text="'D'+(i+1)+' · '+day.shortDate"></button>
     </template>
     <button @click="currentDay=4" :class="currentDay===4?'active':''"
-      class="tab-pill flex-shrink-0">📋 行前清單</button>
+      class="tab-pill flex-shrink-0">📋 行程清單</button>
   </div>
 </div>
 
@@ -283,8 +283,32 @@
       </div>
       <div class="tips-box mb-2"><div class="font-black text-xs mb-1 text-amber-700">💡 穿搭策略</div><div>拍照優先選：米白、奶油黃、燕麥色。避免大花或螢光——法租界+外灘背景天然上相，素色更耐看。帶一件輕薄開衫（冷氣場所）及折疊傘（春雨突發）。</div></div>
       <div class="info-box"><div class="font-black text-xs mb-1">⚠️ 注意事項</div><div>5月上海已入梅雨邊緣，早晚溫差約 8°C。夜晚穿搭建議 Smart Casual，帶薄外套防冷氣。戶外攝影最佳：早晨 8–10 點 / 傍晚 16:30–18:30（黃金小時）。</div></div>
+
+  <!-- 飯店資訊 -->
+  <div>
+    <div class="section-label mb-3">飯店資訊</div>
+    <div class="bg-white rounded-2xl shadow-sm p-5 border border-slate-100">
+      <div class="mb-4">
+        <div class="text-sm font-black text-slate-800 mb-2">錦江之星上海人民廣場淮海東路酒店</div>
+        <div class="text-xs text-slate-500 mb-2">📍 淮海東路627號（人民廣場地鐵站1號出口）</div>
+        <div class="grid grid-cols-2 gap-2 text-xs mb-3">
+          <div><span class="text-slate-400">入住時間</span><div class="font-bold">14:00</div></div>
+          <div><span class="text-slate-400">退房時間</span><div class="font-bold">11:00</div></div>
+          <div><span class="text-slate-400">星級</span><div class="font-bold">3星</div></div>
+          <div><span class="text-slate-400">房型</span><div class="font-bold">雙床房</div></div>
+        </div>
+      </div>
+      <div class="info-box mb-3">
+        <div class="font-black text-xs mb-1">🚇 地理位置優勢</div>
+        <div>位於人民廣場/南京西路商圈，地鐵直達所有行程點。走路即可到達復興路、擁有舒適的中心位置。對面有便利店、餐飲。</div>
+      </div>
+      <div class="tips-box text-xs">
+        <div class="font-black mb-1 text-amber-700">💡 建議</div>
+        <div>抵達時可先行李寄存至飯店（check-in前可用），再出發去第一站。最後一天退房後行李可寄存至11:00。</div>
+      </div>
     </div>
   </div>
+
 
   <!-- 餐廳攻略 -->
   <div>
@@ -396,7 +420,7 @@
         class="flex-1 py-2.5 rounded-2xl text-xs font-black transition-all shadow-sm"
         :class="currentDay===4?'bg-slate-800 text-white shadow-md':'bg-white text-slate-400 border border-slate-100'">
         <div class="text-base leading-none mb-0.5">📋</div>
-        <div>清單</div>
+        <div>行程清單</div>
       </button>
     </div>
   </div>
